@@ -31,19 +31,17 @@
         .list-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px solid #00ffff; padding-bottom: 5px; margin-bottom: 5px; }
         .scroll-area { flex: 1; overflow-y: auto; }
         
-        /* ADJUSTED SCRIPT ITEM */
         .script-item { 
             background: #121212; 
             padding: 10px; 
             margin-bottom: 8px; 
             border-radius: 8px; 
             display: flex; 
-            flex-direction: column; /* Ginawa kong column para lumaki ang buttons */
+            flex-direction: column; 
             gap: 8px;
             border-left: 4px solid #00ffff; 
         }
 
-        /* PINALAKING LETRA NG NAME */
         .item-name { 
             font-size: 13px; 
             color: #ffffff; 
@@ -54,7 +52,6 @@
             white-space: nowrap; 
         }
 
-        /* PINALAKING BUTTONS (EXE & DEL) */
         .item-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; }
         .btn-exe { background: #00ff00; color: #000; border: none; padding: 12px; font-size: 11px; border-radius: 5px; font-weight: 900; text-align: center; }
         .btn-del { background: #ff4444; color: #fff; border: none; padding: 12px; font-size: 11px; border-radius: 5px; font-weight: 900; text-align: center; }
@@ -98,8 +95,17 @@
 
         function execute(code) {
             if(!code) return;
+            
+            let finalCode = code.trim();
+            
+            // DUAL SUPPORT LOGIC:
+            // Kapag nakitang link ang input, babalutin ng loadstring para mag-execute ang Rayfield/menus.
+            if (finalCode.startsWith("http://") || finalCode.startsWith("https://")) {
+                finalCode = 'loadstring(game:HttpGet("' + finalCode + '"))()';
+            }
+
             if(window.Android) {
-                window.Android.startInjection(code);
+                window.Android.startInjection(finalCode);
                 window.Android.showMessage("Sent to Engine!");
             }
         }
@@ -148,5 +154,5 @@
         window.onload = render;
     </script>
 </body>
-</html>
-
+    </html>
+    
